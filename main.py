@@ -3,7 +3,7 @@ import numpy as np
 from scipy.fft import fft
 import wave
 
-wavName = 'audiocheck.net_sin_50Hz_-3dBFS_3s.wav'
+wavName = 'WavFiles/html5bytebeat.wav'
 #wave.open reads the wave file.
 obj = wave.open(wavName, 'rb')
 #sampling frequency
@@ -38,7 +38,6 @@ ax[1].plot(fftFrequency, np.abs(fftMagnitude))
 ax[1].set_title("FFT")
 ax[1].set_xlabel("Frequency (Hz)")
 ax[1].set_ylabel("Magnitude")
-ax[1].set_xlim(0, 100)
 ax[1].grid(True)
 
 plt.subplots_adjust(wspace = 0.3)
