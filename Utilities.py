@@ -85,4 +85,14 @@ class Processing:
         plt.show()
 
     def compareWav(self):
-        return 1
+        magInput = np.abs(self.fftMagnitude)
+        magKey = np.abs(self.fftMagnitudeKey)
+        minLength = min(len(magInput), len(magKey))
+        #Truncate to the smaller input
+        magInput = magInput[:minLength]
+        magKey = magKey[:minLength]
+        #Use cosine similarity between the vectors
+        diffRatio = np.dot(magInput, magKey) / (np.linalg.norm(magInput) * np.linalg.norm(magKey))
+        return diffRatio
+
+
