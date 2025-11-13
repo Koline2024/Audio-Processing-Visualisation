@@ -42,11 +42,12 @@ class Processing:
 
     def compareMFCCs(self):
         #Use dynamic time warping
-
         D, wp = librosa.sequence.dtw(X=self.mfccInput, Y=self.mfccKey, metric = 'cosine')
         distance = D[-1, -1]
         similarity = 1 - (distance / np.max(D))
-        return similarity
+        if similarity >= 0.8:
+            return "Word match: similarity ", similarity
+        return "Word mismatch: similarity ", similarity
 
     def preProcess(self):
         #Butterworth Filter below

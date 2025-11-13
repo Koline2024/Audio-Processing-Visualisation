@@ -1,9 +1,8 @@
-import FFTAnalysis
 import Cepstral
 
 def main():
     wavInput = "WavFiles/Shoe.wav"
-    wavKey = "WavFiles/Garbled.wav"
+    wavKey = "WavFiles/Flew.wav"
     wavAnalyse = Cepstral.Processing(wavInput, wavKey)
     wavAnalyse.preProcess()
     print(wavAnalyse.compareMFCCs())
@@ -11,6 +10,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
