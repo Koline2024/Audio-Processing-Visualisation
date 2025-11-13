@@ -2,11 +2,14 @@ import librosa
 import librosa.feature
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.signal import butter, sosfiltfilt
 
 class Processing:
     def __init__(self, wavInput, wavKey):
         self.wavInput = wavInput
         self.wavKey = wavKey
+        self.filteredInput = []
+        self.filteredKey = []
         #Load the audio with librosa
         try:
             self.yInput, self.srInput = librosa.load(wavInput, sr = None)
@@ -48,4 +51,21 @@ class Processing:
         #Cosine similarity
         diffRatio = np.dot(vecInput, vecKey) / (np.linalg.norm(vecInput) * np.linalg.norm(vecKey))
         return diffRatio
+
+    def preProcess(self):
+        #Butterworth Filter below
+        nyqInput = 0.5 * self.srInput
+        nyqKey = 0.5 * self.srKey
+        lowInput = 20 / nyqInput
+        lowKey = 20 / nyqKey
+        highKey = 20000 / nyqInput
+        highInput = 20000 / nyqKey
+
+        highInput = min(highInput, 0.9999)
+        highKey = min(highKey, 0.9999)
+
+        sosInput = butter(6, [lowInput, highInput], btype="band", output="sos")
+        sosKey = butter(6, [lowKey, highKey], btype="band", output="sos")
+        self.filteredInput = sosfiltfilt(sosInput, self.yInput)
+        self.filteredKey = sosfiltfilt(sosKey, self.yKey)
 
