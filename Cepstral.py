@@ -19,23 +19,33 @@ class Processing:
 
     def plotMFCCs(self):
         fig, ax = plt.subplots(1, 2, figsize=(14, 10))
+
         #Input
-        ax[0].librosa.display.specshow(self.mfccInput, x_axis="time", sr=self.srInput)
-        ax[0].colorbar(format="%+2.0f dB")
-        ax[0].title("MFCC Input")
-        ax[0].ylabel("MFCC Coefficient")
-        ax[0].xlabel("Time (s)")
+        imgInput = librosa.display.specshow(self.mfccInput, x_axis = 'time', sr = self.srInput, ax=ax[0])
+        fig.colorbar(imgInput, ax = ax[0], format = "%+2.0f dB")
+        ax[0].set_title("MFCC Input")
+        ax[0].set_ylabel("MFCC Coefficient")
+        ax[0].set_xlabel("Time (s)")
 
         #Key
-        ax[1].librosa.display.specshow(self.mfccKey, x_axis="time", sr=self.srKey)
-        ax[1].colorbar(format="%+2.0f dB")
-        ax[1].title("MFCC Input")
-        ax[1].ylabel("MFCC Coefficient")
-        ax[1].xlabel("Time (s)")
+        imgKey = librosa.display.specshow(self.mfccKey, x_axis="time", sr=self.srKey, ax=ax[1])
+        fig.colorbar(imgKey, ax = ax[1], format = "%+2.0f dB")
+        ax[1].set_title("MFCC Keyword")
+        ax[1].set_ylabel("MFCC Coefficient")
+        ax[1].set_xlabel("Time (s)")
 
         plt.subplots_adjust(wspace = 0.3)
-        plt.subplots_adjust(hspace = 0.3)
         plt.show()
 
+    def compareMFCCs(self):
+        vecInput = self.mfccInput.flatten()
+        vecKey = self.mfccKey.flatten()
+        #Truncate to the smallest length
+        minLength = min(len(vecInput), len(vecKey))
+        vecInput = vecInput[:minLength]
+        vecKey = vecKey[:minLength]
 
+        #Cosine similarity
+        diffRatio = np.dot(vecInput, vecKey) / (np.linalg.norm(vecInput) * np.linalg.norm(vecKey))
+        return diffRatio
 
