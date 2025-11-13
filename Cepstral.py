@@ -41,16 +41,12 @@ class Processing:
         plt.show()
 
     def compareMFCCs(self):
-        vecInput = self.mfccInput.flatten()
-        vecKey = self.mfccKey.flatten()
-        #Truncate to the smallest length
-        minLength = min(len(vecInput), len(vecKey))
-        vecInput = vecInput[:minLength]
-        vecKey = vecKey[:minLength]
+        #Use dynamic time warping
 
-        #Cosine similarity
-        diffRatio = np.dot(vecInput, vecKey) / (np.linalg.norm(vecInput) * np.linalg.norm(vecKey))
-        return diffRatio
+        D, wp = librosa.sequence.dtw(X=self.mfccInput, Y=self.mfccKey, metric = 'cosine')
+        distance = D[-1, -1]
+        similarity = 1 - (distance / np.max(D))
+        return similarity
 
     def preProcess(self):
         #Butterworth Filter below
@@ -58,8 +54,8 @@ class Processing:
         nyqKey = 0.5 * self.srKey
         lowInput = 20 / nyqInput
         lowKey = 20 / nyqKey
-        highKey = 20000 / nyqInput
-        highInput = 20000 / nyqKey
+        highKey = 20000 / nyqKey
+        highInput = 20000 / nyqInput
 
         highInput = min(highInput, 0.9999)
         highKey = min(highKey, 0.9999)
@@ -68,4 +64,8 @@ class Processing:
         sosKey = butter(6, [lowKey, highKey], btype="band", output="sos")
         self.filteredInput = sosfiltfilt(sosInput, self.yInput)
         self.filteredKey = sosfiltfilt(sosKey, self.yKey)
+
+        # Compute MFCCs
+        self.mfccInput = librosa.feature.mfcc(y=self.filteredInput, sr=self.srInput, n_mfcc=13)
+        self.mfccKey = librosa.feature.mfcc(y=self.filteredKey, sr=self.srKey, n_mfcc=13)
 

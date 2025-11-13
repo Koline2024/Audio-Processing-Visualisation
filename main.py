@@ -2,8 +2,8 @@ import FFTAnalysis
 import Cepstral
 
 def main():
-    wavInput = "WavFiles/Chris.wav"
-    wavKey = "WavFiles/Peter.wav"
+    wavInput = "WavFiles/Shoe.wav"
+    wavKey = "WavFiles/Garbled.wav"
     wavAnalyse = Cepstral.Processing(wavInput, wavKey)
     wavAnalyse.preProcess()
     print(wavAnalyse.compareMFCCs())
