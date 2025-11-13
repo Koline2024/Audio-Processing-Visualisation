@@ -63,6 +63,7 @@ class Processing:
         ax[0, 1].set_title("FFT Input")
         ax[0, 1].set_xlabel("Frequency (Hz)")
         ax[0, 1].set_ylabel("Magnitude")
+        ax[0, 1].set_xlim(0, 75)
         ax[0, 1].grid(True)
 
         # for time domain (Key)
@@ -77,8 +78,8 @@ class Processing:
         ax[1, 1].set_title("FFT Key")
         ax[1, 1].set_xlabel("Frequency (Hz)")
         ax[1, 1].set_ylabel("Magnitude")
+        ax[1, 1].set_xlim(0, 75)
         ax[1, 1].grid(True)
-
 
         plt.subplots_adjust(wspace = 0.3)
         plt.subplots_adjust(hspace = 0.3)
